@@ -1,5 +1,5 @@
 import tkinter as tk
-from typing import Text
+from typing import Sized, Text
 import whois
 import os
 import pyautogui as gui # posteriormente vou trocar todas as telas do pyautogui para usar o tkinter diretamente
@@ -10,36 +10,51 @@ class App(tk.Frame):
         super().__init__(master)
         self.pack()
         self.create_widgets() # chama função para criar elementos na tela
-        
-
-
 
     def create_widgets(self):
+        
+        #frame de cima
+        self.topframe = tk.Frame(self, height=5, bg="yellow")
+        self.topframe.pack(side="top")
+        #frame do meio 
+        self.midframe = tk.Frame(self,height="30")
+        self.midframe.pack(side="bottom")
+        #frame de baixo
+        self.bottomframe = tk.Frame(self)
+        self.bottomframe.pack(side="bottom")
+
         # botão inicial de teste do servidor de emails
-        self.home = tk.Button(self, fg="black", bg="grey", height=3,width=9)
+        self.home = tk.Button(self.topframe, fg="black", bg="grey",width=9)
         self.home["text"] = "Testar email"
         self.home.pack(side="left")
         self.home["command"] = self.testeEmail
 
-        # botão para teste whois
-        self.whois = tk.Button(self, fg="brown", text="Who" ,command=self.mainwho, height=3)
-        self.whois.pack(side='left')
 
-        # botão para sair do programa
-        self.quit = tk.Button(self,text='QUIT', fg="black", bg="red", command=self.master.destroy, height=3)
-        self.quit.pack(side="right")
+
+        # botão para teste whois
+        self.whois = tk.Button(self.topframe, fg="brown", text="Whois" ,command=self.mainwho)
+        self.whois.pack(side="left")
 
         #botão para abrir o portal interno da Brasil (felipe/)
-        self.interno = tk.Button(self, text="Portal interno", command=lambda: webbrowser.open_new_tab('http://felipe'), height=3)
-        self.interno.pack(side='left')
+        self.interno = tk.Button(self.topframe, text="Portal interno", command=lambda: webbrowser.open_new_tab('http://felipe'))
+        self.interno.pack(side="left")
 
+        # botão para sair do programa
+        self.quit = tk.Button(self.midframe,text='QUIT', fg="black", bg="red", command=self.master.destroy)
+        self.quit.pack(side="left")
+
+        self.text = tk.Label(self.bottomframe)
+        self.text.pack(side="left")
+        self.text['text'] = "Texto aqui"
+        
 
     def testeEmail(self): #função de teste de email
         dom = "email-ssl.com.br"
         w = whois.whois(dom) # whois aplicado ao domínio
         varping = None
-        print("Whois sendo aplicado no domínio", dom)
-        gui.alert(w,"Resultado Whois")
+        self.text["text"] = (w, "Resultado Whois")        # exibe a saida do whois dentro da propria aplicação
+        # print("Whois sendo aplicado no domínio", dom)
+        #gui.alert(w,"Resultado Whois")
         ping = gui.confirm(text='Deseja realizar um ping no'+dom+"?", title='Ping', buttons=['Sim', 'Não'])
         if ping == "Sim":
             varping = os.system("ping " + dom) #ping realizado pelo OS no domínio recebe
@@ -57,8 +72,11 @@ class App(tk.Frame):
         dom = gui.prompt("Insira o domínio para realizar o Whois")
         w = whois.whois(dom) # whois aplicado ao domínio
         varping = None
-        print("Whois sendo aplicado no domínio ", dom)
-        gui.alert(w,"Resultado Whois")
+        self.text["text"] = ("Whois sendo aplicado no domínio", dom)        # exibe a saida do whois dentro da propria aplicação
+        
+        #print("Whois sendo aplicado no domínio ", dom)
+        self.text["text"] = (w, "Resultado Whois")        # exibe a saida do whois dentro da propria aplicação
+        #gui.alert(w,"Resultado Whois")
         ping = gui.confirm(text='Deseja realizar um ping (teste de conexão) em '+dom+" ?", title='Ping', buttons=['Sim', 'Não'])
         if ping == "Sim":
             varping = os.system("ping " + dom) #ping realizado pelo OS no domínio recebe
