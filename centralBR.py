@@ -21,8 +21,6 @@ class App(tk.Frame):
         self.home.pack(side="left")
         self.home["command"] = self.testeEmail
 
-        self.freearea = tk.Text(self,fg="green",width=30, height=10)
-        self.freearea.pack(side="bottom")
         # botão para teste whois
         self.whois = tk.Button(self, fg="brown", text="Who" ,command=self.mainwho, height=3)
         self.whois.pack(side='left')
