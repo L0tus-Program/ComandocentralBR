@@ -1,3 +1,4 @@
 pyautogui
 whois
 os
+cx_freeze
