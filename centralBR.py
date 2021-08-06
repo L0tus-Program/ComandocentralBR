@@ -47,6 +47,7 @@ class App(tk.Frame):
         self.text.pack(side="left")
         self.text['text'] = "Texto aqui"
         
+        
 
     def testeEmail(self): #função de teste de email
         dom = "email-ssl.com.br"
