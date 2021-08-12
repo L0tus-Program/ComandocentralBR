@@ -3,7 +3,7 @@ from typing import Sized, Text
 import whois
 import os
 import pyautogui as gui # posteriormente vou trocar todas as telas do pyautogui para usar o tkinter diretamente
-import webbrowser
+import webbrowser #usei para abrir páginas no navegador do usuario
 
 class App(tk.Frame):
     def __init__(self, master=None):
@@ -46,6 +46,7 @@ class App(tk.Frame):
         self.text = tk.Label(self.bottomframe)
         self.text.pack(side="left")
         self.text['text'] = "Texto aqui"
+        
         
         
 
