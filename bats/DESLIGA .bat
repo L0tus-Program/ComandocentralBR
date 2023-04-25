@@ -1,0 +1,1 @@
+shutdown -t 5 -s -f -c "DESLIGAMENTO AUTOMATICO SENDO FEITO"
