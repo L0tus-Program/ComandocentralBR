@@ -17,6 +17,9 @@
             Aparentemente preciso de uma configuração de domínio da nossa rede windows pra conseguir esxecutar esse script , ele deve invocar um script do meu proprio computador para outra máquina.
 
     - Acesso a planilha de controle de pedidos do Jeferson
+    - Integração do projeto timer com lembrete
+    - Teste de rede para o servidor principal e e-mails
+  
 
 
 

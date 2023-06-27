@@ -1,35 +1,82 @@
+import subprocess
+import os
+# posteriormente vou trocar todas as telas do pyautogui para usar o tkinter diretamente
+import pyautogui as gui
+import whois
+import shutil
+import time 
+import smtplib
+from email.mime.text import MIMEText
+from plyer import notification
 from tkinter import *
+import socket
 
-# Cria a janela principal
-root = Tk()
+def notificacao():
+    try:  # constrói e exibe a notificação do lembrete
+            notification.notify(
+                title="SERVIDOR",
+                message= "Seu computador não está conectado ao servidor do SIGER, ou apresenta instabilidade. A TI já foi notificada!",
+                timeout=10,
+            )
+    except Exception as e:
+        #print(f'Erro notificação {e}' )
+        pass
 
-# Define a geometria da janela com largura 500 e altura 500
-root.geometry('500x500')
 
-# Define a imagem de fundo
-background_image = PhotoImage(file='brasil.png')
 
-# Cria um label para exibir a imagem de fundo
-background_label = Label(root, image=background_image)
-background_label.place(x=0, y=0, relwidth=1, relheight=1)
-# Cria os botões
-button1 = Button(root, text='Botão 1', width=10)
-button2 = Button(root, text='Botão 2', width=10)
-button3 = Button(root, text='Botão 3', width=10)
 
-# Posiciona os botões utilizando o gerenciador de layout grid
-button1.grid(row=1, column=1, padx=10, pady=10)
-button2.grid(row=1, column=2, padx=10, pady=10)
-button3.grid(row=1, column=3, padx=10, pady=10)
+def email_falha():
+    username = "felipe@brasildosparafusos.com.br"
+    password = "Brasil@01"
+    emailDestino = "felipe@brasildosparafusos.com.br"
+    computador = socket.gethostname()
+    conteudo = f'Servidor não encontrado no ping! {computador}'
+    # Criação do objeto MIMEText
+    # é necessário codificar o objeto para utf-8 para poder enviar acentos
+    msg = MIMEText(conteudo, 'plain', 'utf-8')
+    msg['To'] = emailDestino
+    msg['From'] = username
+    msg['Subject'] = f'Falha no ping de servidor pelo {computador}'
 
-# Centraliza a linha dos botões
-root.grid_columnconfigure(0, weight=1)
-root.grid_columnconfigure(4, weight=1)
+      # Adicionando cabeçalhos de conteúdo
+    msg.add_header('Content-Type', 'text/plain; charset=UTF-8')
 
-# Posiciona os botões centralizados horizontalmente e verticalmente
-button1.place(relx=0.5, rely=0.5, anchor=CENTER)
-button2.place(relx=0.5, rely=0.6, anchor=CENTER)
-button3.place(relx=0.5, rely=0.7, anchor=CENTER)
+       # Enviando o e-mail
+    with smtplib.SMTP("email-ssl.com.br", 587) as server:
+        server.starttls()
+        server.login(username, password)
+        server.sendmail(username, emailDestino, msg.as_string())
 
-# Inicia o loop da interface gráfica
-root.mainloop()
+    print("E-mail enviado com sucesso!")
+
+
+
+def test_server():
+    # iniciar loop infinito
+    while True:
+        time.sleep(1)
+    # realizar ping no servidor SERVER
+        ping = os.system("ping server")
+    # analisar retorno do ping
+        if ping == 1:
+            print("Equipamento não encontrado na rede")
+            # em caso de servidor offline, enviar e-mail para felipe@brasildosparafusos.com.br
+            email_falha()
+            notificacao()
+            time.sleep(20) 
+
+
+            # exibir notificação na tela do usuario caso o server esteja offline
+
+        else:
+            print(ping)
+            print("Host encontrado")
+
+    
+
+   
+
+
+
+
+test_server()

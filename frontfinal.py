@@ -9,6 +9,7 @@ import pyautogui as gui
 import webbrowser  # usei para abrir páginas no navegador do usuario
 import functions as f
 import modais
+import threading
 
 root = Tk()
 root.title("Auto atendimento Brasil dos Parafusos")
@@ -175,7 +176,19 @@ menu_bar.add_cascade(label="Ramais", menu=ramais_menu)
 
 # Define o estilo para o botão "Abrir"
 # solutions_menu.entryconfig(0, font=("Arial", 12), foreground="red")
+def on_close():
+    global thread 
+    thread = False
+    root.destroy()
 
+root.protocol("WM_DELETE_WINDOW", on_close)
 
 root.config(menu=menu_bar)
+# booleana de controle da thread
+global thread
+thread = True
+t = threading.Thread(target=lambda: f.test_server(thread))
+t.start()
 root.mainloop()
+
+
